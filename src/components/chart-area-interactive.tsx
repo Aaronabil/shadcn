@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
+import { useTheme } from "@/components/theme-context"
 import { useIsMobile } from "@/hooks/use-mobile"
 import {
   Card,
@@ -12,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import type { ChartConfig } from "@/components/ui/chart"
 import {
   ChartContainer,
   ChartTooltip,
@@ -54,15 +54,6 @@ const chartData = [
   { date: "2024-04-19", desktop: 243, mobile: 180 },
   { date: "2024-04-20", desktop: 89, mobile: 150 },
   { date: "2024-04-21", desktop: 137, mobile: 200 },
-  { date: "2024-04-22", desktop: 224, mobile: 170 },
-  { date: "2024-04-23", desktop: 138, mobile: 230 },
-  { date: "2024-04-24", desktop: 387, mobile: 290 },
-  { date: "2024-04-25", desktop: 215, mobile: 250 },
-  { date: "2024-04-26", desktop: 75, mobile: 130 },
-  { date: "2024-04-27", desktop: 383, mobile: 420 },
-  { date: "2024-04-28", desktop: 122, mobile: 180 },
-  { date: "2024-04-29", desktop: 315, mobile: 240 },
-  { date: "2024-04-30", desktop: 454, mobile: 380 },
   { date: "2024-05-01", desktop: 165, mobile: 220 },
   { date: "2024-05-02", desktop: 293, mobile: 310 },
   { date: "2024-05-03", desktop: 247, mobile: 190 },
@@ -126,23 +117,24 @@ const chartData = [
   { date: "2024-06-30", desktop: 446, mobile: 400 },
 ]
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  desktop: {
-    label: "Desktop",
-    color: "var(--primary)",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "var(--primary)",
-  },
-} satisfies ChartConfig
-
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile()
+  const { theme } = useTheme()
   const [timeRange, setTimeRange] = React.useState("90d")
+
+  const chartConfig = {
+    visitors: {
+      label: "Visitors",
+    },
+    desktop: {
+      label: "Desktop",
+      color: "var(--primary)",
+    },
+    mobile: {
+      label: "Mobile",
+      color: "var(--primary)",
+    },
+  }
 
   React.useEffect(() => {
     if (isMobile) {
@@ -219,7 +211,7 @@ export function ChartAreaInteractive() {
                 <stop
                   offset="5%"
                   stopColor="var(--color-desktop)"
-                  stopOpacity={1.0}
+                  stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"

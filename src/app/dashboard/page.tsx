@@ -21,7 +21,7 @@ export default function Page() {
       }
     >
       <AppSidebar variant="inset" />
-      <SidebarInset className="flex-1 w-full bg-gray-50 min-h-screen">
+      <SidebarInset className="flex-1 w-full bg-background min-h-screen">
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">

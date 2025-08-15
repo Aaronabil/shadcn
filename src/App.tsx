@@ -1,11 +1,11 @@
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom"
-import { useEffect } from "react"
 import Dashboard from "@/app/dashboard/page"
-import { ThemeProvider } from "@/components/theme-provider"
 import { ProtectedRoute } from "@/app/dashboard/authpage"
 import { LoginForm } from "@/components/auth/login-form"
 import { RegisterForm } from "@/components/auth/register-form"
 import { supabase } from "@/lib/supabase"
+import { useEffect } from "react"
+import { ForgotPassForm } from "@/components/auth/forgotpass-form"
 
 export default function App() {
   const navigate = useNavigate()
@@ -18,42 +18,49 @@ export default function App() {
         navigate("/", { replace: true })
       }
     }
-
     checkSession()
   }, [location.pathname, navigate])
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-              <div className="w-full max-w-sm">
-                <LoginForm />
-              </div>
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+            <div className="w-full max-w-sm">
+              <LoginForm />
             </div>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-              <div className="w-full max-w-sm">
-                <RegisterForm />
-              </div>
+          </div>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+            <div className="w-full max-w-sm">
+              <RegisterForm />
             </div>
-          }
-        />
-        <Route
-          path="/*"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </ThemeProvider>
+          </div>
+        }
+      />
+      <Route
+        path="/forgot-password"
+        element={
+          <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+            <div className="w-full max-w-sm">
+              <ForgotPassForm />
+            </div>
+          </div>
+        }
+      />
+      <Route
+        path="/*"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   )
 }
