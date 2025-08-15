@@ -6,6 +6,7 @@ import { RegisterForm } from "@/components/auth/register-form"
 import { supabase } from "@/lib/supabase"
 import { useEffect } from "react"
 import { ForgotPassForm } from "@/components/auth/forgotpass-form"
+import { UpdatePassForm } from "@/components/auth/updatepass-form"
 
 export default function App() {
   const navigate = useNavigate()
@@ -49,6 +50,16 @@ export default function App() {
           <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
             <div className="w-full max-w-sm">
               <ForgotPassForm />
+            </div>
+          </div>
+        }
+      />
+      <Route
+        path="/update-password"
+        element={
+          <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+            <div className="w-full max-w-sm">
+              <UpdatePassForm />
             </div>
           </div>
         }
