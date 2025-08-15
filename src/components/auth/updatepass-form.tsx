@@ -47,19 +47,19 @@ export function UpdatePassForm({
         setSuccess('')
 
         if (!user) {
-            setError("Anda harus login untuk memperbarui password.")
+            setError("You should get the link from email.")
             setLoading(false)
             return
         }
 
         if (!validateEmail(email)) {
-            setError("Email tidak valid.")
+            setError("Invalid email.")
             setLoading(false)
             return
         }
 
         if (user.email !== email) {
-            setError("Email tidak sesuai dengan email yang sedang login.")
+            setError("Email does not match the email currently logged in.")
             setLoading(false)
             return
         }
@@ -72,10 +72,10 @@ export function UpdatePassForm({
 
         const { error } = await updatePassword(newPassword)
         if (error) {
-            setError(" " + error.message)
+            setError(error.message)
             setLoading(false)
         } else {
-            setSuccess("Password berhasil diperbarui!")
+            setSuccess("Password updated successfully!")
             setLoading(false)
         }
     }
