@@ -2,18 +2,14 @@
 
 import * as React from "react"
 import {
-  IconChartBar,
   IconDashboard,
   IconDatabase,
-  IconFileWord,
-  IconFolder,
-  IconListDetails,
+  IconBooks,
   IconReport,
-  IconUsers,
+  IconCertificate,
 } from "@tabler/icons-react"
-
+import { FaTasks } from "react-icons/fa"
 import { GiBookAura } from "react-icons/gi"
-
 import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
@@ -40,45 +36,35 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     navMain: [
       {
         title: "Dashboard",
-        url: "#",
+        url: "/dashboard",
         icon: IconDashboard,
       },
       {
-        title: "Lifecycle",
-        url: "#",
-        icon: IconListDetails,
+        title: "Courses",
+        url: "/courses",
+        icon: IconBooks,
       },
       {
-        title: "Analytics",
-        url: "#",
-        icon: IconChartBar,
+        title: "Assigments",
+        url: "/assignments",
+        icon: FaTasks,
       },
       {
-        title: "Projects",
-        url: "#",
-        icon: IconFolder,
-      },
-      {
-        title: "Team",
-        url: "#",
-        icon: IconUsers,
+        title: "Certificates",
+        url: "/certificates",
+        icon: IconCertificate,
       },
     ],
     documents: [
       {
         name: "Data Library",
-        url: "#",
+        url: "/data-library",
         icon: IconDatabase,
       },
       {
         name: "Reports",
-        url: "#",
+        url: "/reports",
         icon: IconReport,
-      },
-      {
-        name: "Word Assistant",
-        url: "#",
-        icon: IconFileWord,
       },
     ],
   }
@@ -92,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <a href="/dashboard">
                 <GiBookAura className="!size-5" />
                 <span className="text-base font-semibold">LMS.</span>
               </a>

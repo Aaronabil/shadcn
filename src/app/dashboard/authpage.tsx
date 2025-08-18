@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LoginForm } from '@/components/auth/login-form'
+import { StudentLoginForm } from '@/components/auth/student-login-form'
 import { RegisterForm } from '@/components/auth/register-form'
 import { useAuth } from '@/contexts/authcontext'
 import { Navigate } from 'react-router-dom'
@@ -20,7 +20,7 @@ export const AuthPage: React.FC = () => {
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.3 }}
             >
-              <LoginForm onToggleMode={() => setIsLogin(false)} />
+              <StudentLoginForm onToggleMode={() => setIsLogin(false)} />
             </motion.div>
           ) : (
             <motion.div
@@ -47,7 +47,7 @@ export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ childr
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/student/login" replace />
   }
 
   return <>{children}</>

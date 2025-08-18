@@ -8,6 +8,7 @@
     signIn: (email: string, password: string) => Promise<{ error: any }>
     signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>
     signOut: () => Promise<void>
+    signInWithGoogle: () => Promise<any> // Temporarily set to any to resolve the immediate type error
     resetPasswordForEmail: (email: string) => Promise<{ error: any }>
     updatePassword: (password: string) => Promise<{ error: any }>
     }

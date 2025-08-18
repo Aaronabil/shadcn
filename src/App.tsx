@@ -1,7 +1,11 @@
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom"
 import Dashboard from "@/app/dashboard/page"
+import Course from "@/app/dashboard/course"
+import Assigment from "@/app/dashboard/assigment"
+import Certificate from "@/app/dashboard/certificate"
 import { ProtectedRoute } from "@/app/dashboard/authpage"
-import { LoginForm } from "@/components/auth/login-form"
+import { StudentLoginForm } from "@/components/auth/student-login-form"
+import { LecturerLoginForm } from "@/components/auth/lecturer-login-form"
 import { RegisterForm } from "@/components/auth/register-form"
 import { supabase } from "@/lib/supabase"
 import { useEffect } from "react"
@@ -15,8 +19,8 @@ export default function App() {
   useEffect(() => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
-      if (session && (location.pathname === "/login" || location.pathname === "/register")) {
-        navigate("/", { replace: true })
+      if (session && (location.pathname === "/student/login" || location.pathname === "/lecturer/login" || location.pathname === "/register")) {
+        navigate("/dashboard", { replace: true })
       }
     }
     checkSession()
@@ -25,11 +29,21 @@ export default function App() {
   return (
     <Routes>
       <Route
-        path="/login"
+        path="/student/login"
         element={
           <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
             <div className="w-full max-w-sm">
-              <LoginForm />
+              <StudentLoginForm />
+            </div>
+          </div>
+        }
+      />
+      <Route
+        path="/lecturer/login"
+        element={
+          <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+            <div className="w-full max-w-sm">
+              <LecturerLoginForm />
             </div>
           </div>
         }
@@ -72,6 +86,30 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/courses"
+        element={
+          <ProtectedRoute>
+            <Course />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/assignments"
+        element={
+          <ProtectedRoute>
+            <Assigment />
+          </ProtectedRoute>
+        }
+      /><Route
+        path="/certificates"
+        element={
+          <ProtectedRoute>
+            <Certificate />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
+    
   )
 }
