@@ -4,25 +4,36 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 import { ModeToggle } from "./mode-toggle"
 import { useLocation } from "react-router-dom"
 import { useEffect, useState } from "react"
+import { useAuth } from "@/contexts/authcontext"
 
 export function SiteHeader() {
   const location = useLocation()
   const [pageTitle, setPageTitle] = useState("Student Dashboard")
+  const { user } = useAuth()
 
   useEffect(() => {
     switch (location.pathname) {
       case "/dashboard":
       case "/":
-        setPageTitle("Student Dashboard")
+        setPageTitle(`Hello ${user?.user_metadata?.full_name || user?.email || "Student"}, Welcome to Student Dashboard👋`)
         break
-      case "/courses":
-        setPageTitle("Courses")
+      case "/my-classes":
+        setPageTitle("My Classes")
+        break
+      case "/modules":
+        setPageTitle("Module")
         break
       case "/assignments":
         setPageTitle("Assignments")
         break
-      case "/certificates":
-        setPageTitle("Certificates")
+      case "/exams":
+        setPageTitle("Exams or Quizzes")
+        break
+      case "/grades":
+        setPageTitle("Grades")
+        break
+      case "/discussion-forum":
+        setPageTitle("Discussion Forum")
         break
       case "/data-library":
         setPageTitle("Data Library")
@@ -34,7 +45,7 @@ export function SiteHeader() {
         setPageTitle("Student Dashboard") // Default title
         break
     }
-  }, [location.pathname])
+  }, [location.pathname, user])
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">

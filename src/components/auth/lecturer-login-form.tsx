@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertTitle } from "@/components/ui/alert"
 import { AlertCircleIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-// import { Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useAuth } from "@/contexts/authcontext"
 import { motion, AnimatePresence } from 'framer-motion'
 import { Eye, EyeOff } from 'lucide-react'
@@ -43,7 +43,7 @@ export function LecturerLoginForm({
             setError("Sign In Failed: " + error.message)
             setLoading(false)
         } else {
-            navigate("/", { replace: true })
+            navigate("/dashboard-dosen", { replace: true })
         }
     }
 
@@ -95,9 +95,9 @@ export function LecturerLoginForm({
                                 <div className="relative grid gap-3">
                                     <div className="flex items-center">
                                         <Label htmlFor="password">Password</Label>
-                                        {/* <Link to="/forgot-password" className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
+                                        <Link to="/forgot-password" className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
                                             Forgot your password?
-                                        </Link> */}
+                                        </Link>
                                     </div>
                                     <div className="relative">
                                         <Input

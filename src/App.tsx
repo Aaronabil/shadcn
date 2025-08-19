@@ -1,8 +1,11 @@
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom"
 import Dashboard from "@/app/dashboard/page"
-import Course from "@/app/dashboard/course"
+import MyClasses from "@/app/dashboard/class"
+import Module from "@/app/dashboard/module"
 import Assigment from "@/app/dashboard/assigment"
-import Certificate from "@/app/dashboard/certificate"
+import Exam from "@/app/dashboard/exam"
+import Grade from "@/app/dashboard/grade"
+import DiscussionForum from "@/app/dashboard/discussion-forum"
 import { ProtectedRoute } from "@/app/dashboard/authpage"
 import { StudentLoginForm } from "@/components/auth/student-login-form"
 import { LecturerLoginForm } from "@/components/auth/lecturer-login-form"
@@ -87,10 +90,18 @@ export default function App() {
         }
       />
       <Route
-        path="/courses"
+        path="/my-classes"
         element={
           <ProtectedRoute>
-            <Course />
+            <MyClasses />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/modules"
+        element={
+          <ProtectedRoute>
+            <Module />
           </ProtectedRoute>
         }
       />
@@ -101,11 +112,28 @@ export default function App() {
             <Assigment />
           </ProtectedRoute>
         }
-      /><Route
-        path="/certificates"
+      />
+      <Route
+        path="/exams"
         element={
           <ProtectedRoute>
-            <Certificate />
+            <Exam />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/grades"
+        element={
+          <ProtectedRoute>
+            <Grade />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/discussion-forum"
+        element={
+          <ProtectedRoute>
+            <DiscussionForum />
           </ProtectedRoute>
         }
       />

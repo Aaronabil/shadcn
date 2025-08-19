@@ -7,6 +7,9 @@ import {
   IconBooks,
   IconReport,
   IconCertificate,
+  IconSchool,
+  IconListDetails,
+  IconBrandHipchat,
 } from "@tabler/icons-react"
 import { FaTasks } from "react-icons/fa"
 import { GiBookAura } from "react-icons/gi"
@@ -40,8 +43,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: IconDashboard,
       },
       {
-        title: "Courses",
-        url: "/courses",
+        title: "My Classes",
+        url: "/my-classes",
+        icon: IconSchool,
+      },
+      {
+        title: "Modules",
+        url: "/modules",
         icon: IconBooks,
       },
       {
@@ -50,10 +58,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: FaTasks,
       },
       {
-        title: "Certificates",
-        url: "/certificates",
+        title: "Exams/Quizzes",
+        url: "/exams",
+        icon: IconListDetails,
+      },
+      {
+        title: "Grades",
+        url: "/grades",
         icon: IconCertificate,
       },
+      {
+        title: "Discussion Forum",
+        url: "/discussion-forum",
+        icon: IconBrandHipchat,
+      }
     ],
     documents: [
       {

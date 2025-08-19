@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertTitle } from "@/components/ui/alert"
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react"
 // import { useNavigate } from "react-router-dom"
-import { Link } from "react-router-dom"
+// import { Link } from "react-router-dom"
 import { useAuth } from "@/contexts/authcontext"
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -127,10 +127,10 @@ export function ForgotPassForm({
                                 </div>
                             </div>
                             <div className="mt-4 text-center text-sm">
-                                Do you remember the password?{" "}
-                                <Link to="/login" className="underline underline-offset-4">
+                                We hope you will not forget your password again.{" "}
+                                {/* <Link to="/login" className="underline underline-offset-4">
                                     Sign In
-                                </Link>
+                                </Link> */}
                             </div>
                         </form>
                     </CardContent>

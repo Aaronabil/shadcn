@@ -44,7 +44,8 @@ function getInitials(fullName) {
   return `${firstInitial}${lastInitial}`.toUpperCase();
 }
 
-export function NavUser({
+export function NavUser(
+  {
   user,
 }: {
   user: {
@@ -57,7 +58,7 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-  const { signOut} = useAuth()
+  const { signOut } = useAuth()
 
   const initials = getInitials(user?.user_metadata?.full_name || user.name || user.email);
   return (

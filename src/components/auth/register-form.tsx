@@ -16,14 +16,20 @@ import { Link } from "react-router-dom"
 import { signUp } from "@/lib/supabase"
 import { Eye, EyeOff } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { StudyProgramCombobox } from '@/components/studyprogram-combobox'
+import { EntryYearsCombobox } from '@/components/entryyears-combobox'
+import { supabase } from "@/lib/supabase"
 
 export function RegisterForm({
     className,
     ...props
 }: React.ComponentProps<"div">) {
     const [formData, setFormData] = useState({
+        nim: '',
         fullName: '',
         email: '',
+        studyProgram: '',
+        entryYear: 0, // Change to number
         password: '',
         confirmPassword: ''
     })
@@ -34,6 +40,14 @@ export function RegisterForm({
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
+    }
+
+    const handleStudyProgramChange = (value: string) => {
+        setFormData({ ...formData, studyProgram: value })
+    }
+
+    const handleEntryYearChange = (value: number) => {
+        setFormData({ ...formData, entryYear: value })
     }
 
     async function handleSubmit(e: React.FormEvent) {
@@ -54,14 +68,37 @@ export function RegisterForm({
             return
         }
 
-        const { error } = await signUp(formData.email, formData.password, formData.fullName)
-        if (error) {
-            setError("Register Failed: " + error.message)
+        const { data, error: signUpError } = await signUp(formData.email, formData.password, formData.fullName)
+        if (signUpError) {
+            setError(signUpError.message)
+            setLoading(false)
+            return
+        }
+
+        const user = data.user
+
+        // 2. insert ke tabel mahasiswa
+        const { error: insertError } = await supabase.from("students").insert([
+            {
+                user_id: user?.id,          // foreign key ke auth.users
+                nim: formData.nim,
+                nama: formData.fullName,
+                email: formData.email,
+                program_studi: formData.studyProgram,
+                tahun_masuk: formData.entryYear
+            }
+        ])
+
+        if (insertError) {
+            setError(insertError.message)
         } else {
             setSuccess('Please check email to verify your account.')
             setFormData({
+                nim: '',
                 fullName: '',
                 email: '',
+                studyProgram: '',
+                entryYear: 0,
                 password: '',
                 confirmPassword: ''
             })
@@ -76,133 +113,153 @@ export function RegisterForm({
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
         >
-        <div className={cn("flex flex-col gap-6", className)} {...props}>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Sign up</CardTitle>
-                    <CardDescription>
-                        Register now to have an account.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit}>
-                        <AnimatePresence>
-                            {success && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="mb-4"
-                                >
-                                    <Alert className="text-green-500">
-                                        <CheckCircle2Icon />
-                                        <AlertTitle>{success}</AlertTitle>
-                                    </Alert>
-                                </motion.div>
-                            )}
-                            {error && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="mb-4"
-                                >
-                                    <Alert variant="destructive">
-                                        <AlertCircleIcon />
-                                        <AlertTitle>{error}</AlertTitle>
-                                    </Alert>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                        <div className="flex flex-col gap-6">
-                            <div className="grid gap-3">
-                                <Label htmlFor="fullName">Full Name</Label>
-                                <Input
-                                    id="fullname"
-                                    name="fullName" // Add name attribute
-                                    type="text"
-                                    placeholder="Enter your full name"
-                                    value={formData.fullName} // Controlled component
-                                    onChange={handleChange} // Controlled component
-                                    required
-                                />
-                            </div>
-                            <div className="grid gap-3">
-                                <Label htmlFor="email">Email</Label>
-                                <Input
-                                    id="email"
-                                    name="email" // Add name attribute
-                                    type="email"
-                                    placeholder="user@example.com"
-                                    value={formData.email} // Controlled component
-                                    onChange={handleChange} // Controlled component
-                                    required
-                                />
-                            </div>
-                            <div className="grid gap-3">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
-                                </div>
-                                <div className="relative"> {/* Add relative positioning for icon */}
+            <div className={cn("flex flex-col gap-6", className)} {...props}>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Sign up</CardTitle>
+                        <CardDescription>
+                            Register now to have an account.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={handleSubmit}>
+                            <AnimatePresence>
+                                {success && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="mb-4"
+                                    >
+                                        <Alert className="text-green-500">
+                                            <CheckCircle2Icon />
+                                            <AlertTitle>{success}</AlertTitle>
+                                        </Alert>
+                                    </motion.div>
+                                )}
+                                {error && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="mb-4"
+                                    >
+                                        <Alert variant="destructive">
+                                            <AlertCircleIcon />
+                                            <AlertTitle>{error}</AlertTitle>
+                                        </Alert>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                            <div className="flex flex-col gap-6">
+                                <div className="grid gap-3">
+                                    <Label htmlFor="nim">NIM</Label>
                                     <Input
-                                        id="password"
-                                        name="password" // Add name attribute
-                                        type={showPassword ? 'text' : 'password'} // Toggle password visibility
-                                        placeholder="Create a password"
-                                        value={formData.password} // Controlled component
+                                        id="nim"
+                                        name="nim"
+                                        type="number"
+                                        placeholder="Enter your NIM"
+                                        value={formData.nim}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="grid gap-3">
+                                    <Label htmlFor="fullName">Full Name</Label>
+                                    <Input
+                                        id="fullname"
+                                        name="fullName" // Add name attribute
+                                        type="text"
+                                        placeholder="Enter your full name"
+                                        value={formData.fullName} // Controlled component
                                         onChange={handleChange} // Controlled component
                                         required
                                     />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                                    >
-                                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                    </button>
                                 </div>
-                            </div>
-                            <div className="grid gap-3">
-                                <div className="flex items-center">
-                                    <Label htmlFor="confirmPassword">Confirm Password</Label> {/* Change htmlFor */}
-                                </div>
-                                <div className="relative"> {/* Add relative positioning for icon */}
+                                <div className="grid gap-3">
+                                    <Label htmlFor="email">Email</Label>
                                     <Input
-                                        id="confirmPassword" // Change id
-                                        name="confirmPassword" // Add name attribute
-                                        type={showPassword ? 'text' : 'password'} // Toggle password visibility
-                                        placeholder="Confirm your password"
-                                        value={formData.confirmPassword} // Controlled component
+                                        id="email"
+                                        name="email" // Add name attribute
+                                        type="email"
+                                        placeholder="user@example.com"
+                                        value={formData.email} // Controlled component
                                         onChange={handleChange} // Controlled component
                                         required
                                     />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                                    >
-                                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                    </button>
+                                </div>
+                <div className="grid gap-3">
+                    <Label htmlFor="studyProgram">Study Program</Label>
+                    <StudyProgramCombobox onValueChange={handleStudyProgramChange} />
+                </div>
+                <div className="grid gap-3">
+                    <Label htmlFor="entryYear">Entry Year</Label>
+                    <EntryYearsCombobox onValueChange={handleEntryYearChange} />
+                </div>
+                                <div className="grid gap-3">
+                                    <div className="flex items-center">
+                                        <Label htmlFor="password">Password</Label>
+                                    </div>
+                                    <div className="relative"> {/* Add relative positioning for icon */}
+                                        <Input
+                                            id="password"
+                                            name="password" // Add name attribute
+                                            type={showPassword ? 'text' : 'password'} // Toggle password visibility
+                                            placeholder="Create a password"
+                                            value={formData.password} // Controlled component
+                                            onChange={handleChange} // Controlled component
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        >
+                                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="grid gap-3">
+                                    <div className="flex items-center">
+                                        <Label htmlFor="confirmPassword">Confirm Password</Label> {/* Change htmlFor */}
+                                    </div>
+                                    <div className="relative"> {/* Add relative positioning for icon */}
+                                        <Input
+                                            id="confirmPassword" // Change id
+                                            name="confirmPassword" // Add name attribute
+                                            type={showPassword ? 'text' : 'password'} // Toggle password visibility
+                                            placeholder="Confirm your password"
+                                            value={formData.confirmPassword} // Controlled component
+                                            onChange={handleChange} // Controlled component
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        >
+                                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-3">
+                                    <Button type="submit" className="w-full" disabled={loading}> {/* Add disabled state */}
+                                        Create account
+                                    </Button>
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-3">
-                                <Button type="submit" className="w-full" disabled={loading}> {/* Add disabled state */}
-                                    Create account
-                                </Button>
+                            <div className="mt-4 text-center text-sm">
+                                Already have an account? {" "}
+                                <Link to="/login" className="underline underline-offset-4">
+                                    Sign in
+                                </Link>
                             </div>
-                        </div>
-                        <div className="mt-4 text-center text-sm">
-                            Already have an account? {" "}
-                            <Link to="/login" className="underline underline-offset-4">
-                                Sign in
-                            </Link>
-                        </div>
-                    </form>
-                </CardContent>
-            </Card>
-        </div>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
         </motion.div>
     )
 }
